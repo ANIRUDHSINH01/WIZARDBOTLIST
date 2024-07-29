@@ -1,50 +1,38 @@
-
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 const webhookUrl = process.env.WEBHOOK_URL;
+const submissionsFile = path.join(__dirname, 'submissions.json');
 
-module.exports = async (req, res) => {
-if (req.method !== 'POST') {
-res.status(405).send('Method Not Allowed');
-return;
-}
-
-const { botID, botPrefix, ownerID, ownerName } = req.body;
-const inviteLink = `https://discord.com/oauth2/authorize?client_id=${botID}&scope=bot&permissions=0`;
-
-const embed = {
-title: "New Bot Submission",
-color: 3447003,
-fields: [
-{ name: "Bot ID", value: botID, inline: false },
-{ name: "Bot Prefix", value: botPrefix, inline: false },
-{ name: "Owner ID", value: ownerID, inline: false },
-{ name: "Owner Name", value: ownerName, inline: false }
-],
-components: [
-{
-type: 1,
-components: [
-{
-type: 2,
-label: "Invite Link",
-style: 5,
-url: inviteLink
-}
-]
-}
-]
+// Load submissions from file
+const loadSubmissions = () => {
+    try {
+        const data = fs.readFileSync(submissionsFile, 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        return [];
+    }
 };
 
-try {
-await axios.post(webhookUrl, { embeds: [embed] }, {
-headers: {
-'Content-Type': 'application/json'
-}
-});
-res.status(200).send('Bot submitted successfully!');
-} catch (error) {
-console.error('Error sending webhook:', error.message);
-res.status(500).send('Failed to submit bot.');
-}
+// Save submissions to file
+const saveSubmissions = (submissions) => {
+    fs.writeFileSync(submissionsFile, JSON.stringify(submissions, null, 2));
+};
+
+module.exports = async (req, res) => {
+    if (req.method === 'POST') {
+        const { botID, botPrefix, ownerID, ownerName } = req.body;
+        const submissions = loadSubmissions();
+
+        submissions.push({ botID, botPrefix, ownerID, ownerName, status: 'pending' });
+        saveSubmissions(submissions);
+
+        res.status(200).send('Bot submitted successfully!');
+    } else if (req.method === 'GET') {
+        const submissions = loadSubmissions();
+        res.status(200).json(submissions);
+    } else {
+        res.status(405).send('Method Not Allowed');
+    }
 };
