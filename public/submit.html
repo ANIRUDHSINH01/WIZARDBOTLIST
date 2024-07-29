@@ -6,22 +6,24 @@
 <title>Submit Bot Information</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-<div class="bg-white p-6 rounded shadow-md w-full max-w-md">
-<h1 class="text-2xl mb-4 text-center">Submit Your Bot Information</h1>
+<body class="bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center min-h-screen">
+
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+<h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Submit Your Bot Information</h1>
 <form id="submitForm" action="/api/submit" method="POST">
-<div class="mb-4">
+<div class="mb-6">
 <label for="botId" class="block text-sm font-medium text-gray-700">Bot ID</label>
-<input type="text" id="botId" name="botId" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+<input type="text" id="botId" name="botId" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 </div>
-<div class="mb-4">
+<div class="mb-6">
 <label for="prefix" class="block text-sm font-medium text-gray-700">Prefix</label>
-<input type="text" id="prefix" name="prefix" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+<input type="text" id="prefix" name="prefix" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 </div>
 <div class="text-center">
-<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
+<button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Submit</button>
 </div>
 </form>
 </div>
+
 </body>
 </html>
