@@ -1,4 +1,6 @@
+
 const axios = require('axios');
+
 const discordClientId = process.env.DISCORD_CLIENT_ID;
 const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;
 const discordRedirectUri = process.env.DISCORD_REDIRECT_URI;
@@ -61,24 +63,25 @@ module.exports = async (req, res) => {
     const ownerId = userInfo.id;
     const ownerName = userInfo.username;
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${botID}&scope=bot&permissions=0`;
-    const embed = {
-        "title": "New Bot Submission",
-        "color": 3447003,
-        "fields": [
-            { "name": "Bot ID", "value": botID, "inline": false },
-            { "name": "Bot Prefix", "value": botPrefix, "inline": false },
-            { "name": "Owner ID", "value": ownerId, "inline": false },
-            { "name": "Owner Name", "value": ownerName, "inline": false }
+
+const embed = {
+        title: "New Bot Submission",
+        color: 3447003,
+        fields: [
+            { name: "Bot ID", value: botID, inline: false },
+            { name: "Bot Prefix", value: botPrefix, inline: false },
+            { name: "Owner ID", value: ownerId, inline: false },
+            { name: "Owner Name", value: ownerName, inline: false }
         ],
-        "components": [
+        components: [
             {
-                "type": 1,
-                "components": [
+                type: 1,
+                components: [
                     {
-                        "type": 2,
-                        "label": "Invite Link",
-                        "style": 5,
-                        "url": inviteLink
+                        type: 2,
+                        label: "Invite Link",
+                        style: 5,
+                        url: inviteLink
                     }
                 ]
             }
@@ -86,7 +89,11 @@ module.exports = async (req, res) => {
     };
 
     try {
-        await axios.post(webhookUrl, { embeds: [embed] });
+        await axios.post(webhookUrl, { embeds: [embed] }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
         res.status(200).send('Bot submitted successfully!');
     } catch (error) {
         console.error('Error sending webhook:', error);
