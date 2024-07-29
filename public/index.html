@@ -37,10 +37,11 @@
 
 <script>
 const clientId = '1012735980337381396';
-const redirectUri = 'https://wizardbotlist.vercel.app/';  // Update this with your actual redirect URI
+const redirectUri = 'https://wizardbotlist.vercel.app/';
 
 document.getElementById('authButton').addEventListener('click', () => {
-const authUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
+https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify
+  const authUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
 window.location.href = authUrl;
 });
 
@@ -82,7 +83,7 @@ body: JSON.stringify({ code: authCode, botID, botPrefix })
 
 const message = await response.text();
 document.getElementById('message').innerText = message;
-  document.getElementById('message').classList.add(response.ok ? 'text-green-500' : 'text-red-500');
+document.getElementById('message').classList.add(response.ok ? 'text-green-500' : 'text-red-500');
 } catch (error) {
 console.error('Error:', error);
 document.getElementById('message').innerText = 'Failed to submit bot.';
