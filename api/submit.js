@@ -13,14 +13,14 @@ const getAccessToken = async (code) => {
       grant_type: 'authorization_code',
       code: code,
       redirect_uri: discordRedirectUri
-    }), {
+    }).toString(), {  // Ensure URLSearchParams is converted to string
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
     return response.data.access_token;
   } catch (error) {
-    console.error('Error fetching access token:', error);
+    console.error('Error fetching access token:', error.response?.data || error.message);
     return null;
   }
 };
@@ -34,7 +34,7 @@ const getUserInfo = async (token) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching user info:', error);
+    console.error('Error fetching user info:', error.response?.data || error.message);
     return null;
   }
 };
@@ -67,7 +67,7 @@ module.exports = async (req, res) => {
     color: 3447003,
     fields: [
       { name: "Bot ID", value: botID, inline: false },
-{ name: "Bot Prefix", value: botPrefix, inline: false },
+      { name: "Bot Prefix", value: botPrefix, inline: false },
       { name: "Owner ID", value: ownerId, inline: false },
       { name: "Owner Name", value: ownerName, inline: false }
     ],
