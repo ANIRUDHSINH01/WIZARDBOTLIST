@@ -1,0 +1,136 @@
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+margin: 0;
+padding: 0;
+}
+
+header {
+background-color: #333;
+color: #fff;
+padding: 10px 0;
+text-align: center;
+}
+
+nav {
+background-color: #444;
+color: #fff;
+padding: 10px;
+text-align: center;
+}
+
+nav a {
+color: #fff;
+margin: 0 10px;
+text-decoration: none;
+}
+
+nav a:hover {
+text-decoration: underline;
+}
+
+main {
+padding: 20px;
+}
+
+footer {
+background-color: #333;
+color: #fff;
+text-align: center;
+padding: 10px 0;
+position: fixed;
+bottom: 0;
+width: 100%;
+}
+
+/* Profile Menu Styles */
+.profile-menu {
+position: relative;
+display: inline-block;
+}
+
+.profile-menu-content {
+display: none;
+position: absolute;
+background-color: #f9f9f9;
+min-width: 160px;
+box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+z-index: 1;
+}
+
+.profile-menu:hover .profile-menu-content {
+display: block;
+}
+
+.profile-menu-content a {
+color: black;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+}
+
+.profile-menu-content a:hover {
+background-color: #f1f1f1;
+}
+
+/* Form Styles */
+form {
+background-color: #fff;
+padding: 20px;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form label {
+display: block;
+margin-bottom: 5px;
+}
+
+form input {
+width: 100%;
+padding: 8px;
+margin-bottom: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+form button {
+background-color: #333;
+color: #fff;
+padding: 10px 15px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+form button:hover {
+background-color: #555;
+}
+
+/* Bot List Styles */
+#botList div {
+background-color: #fff;
+padding: 10px;
+margin-bottom: 10px;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#botList p {
+margin: 5px 0;
+}
+
+#botList button {
+background-color: #333;
+color: #fff;
+padding: 5px 10px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+margin-right: 5px;
+}
+
+#botList button:hover {
+background-color: #555;
+}
+ 
