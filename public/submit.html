@@ -4,55 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Submit Your Bot</title>
-<style>
-.profile-menu {
-position: relative;
-display: inline-block;
-}
-.profile-menu-content {
-display: none;
-position: absolute;
-background-color: #f9f9f9;
-min-width: 160px;
-box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-z-index: 1;
-}
-.profile-menu:hover .profile-menu-content {
-display: block;
-}
-.profile-menu-content a {
-color: black;
-padding: 12px 16px;
-text-decoration: none;
-display: block;
-}
-.profile-menu-content a:hover {background-color: #f1f1f1}
-</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<h1>Submit Your Bot</h1>
-<div class="profile-menu">
-<img id="profile-photo" src="" alt="Profile Photo" width="50" height="50">
-<span id="username"></span>
-<div class="profile-menu-content">
-<a href="/api/auth/logout">Logout</a>
+<body class="bg-gray-100 p-4">
+<div class="max-w-lg mx-auto bg-white p-6 rounded shadow-md">
+<h1 class="text-2xl mb-4">Submit Your Bot</h1>
+<div class="profile-menu mb-4">
+  <img id="profile-photo" src="" alt="Profile Photo" class="w-12 h-12 rounded-full">
+<span id="username" class="ml-2"></span>
+<div class="profile-menu-content hidden absolute bg-white shadow-md rounded mt-2">
+<a href="/api/auth/logout" class="block px-4 py-2 text-black hover:bg-gray-200">Logout</a>
 </div>
 </div>
 <form id="submitForm">
-<label for="botId">Bot ID:</label>
-<input type="text" id="botId" name="botId" required>
-<br>
-<label for="ownerId">Owner ID:</label>
-<input type="text" id="ownerId" name="ownerId" readonly>
-<br>
-<label for="ownerName">Owner Name:</label>
-<input type="text" id="ownerName" name="ownerName" readonly>
-<br>
-<label for="botName">Bot Name:</label>
-<input type="text" id="botName" name="botName" required>
-<br>
-<button type="submit">Submit</button>
+<div class="mb-4">
+<label for="botId" class="block mb-2">Bot ID:</label>
+<input type="text" id="botId" name="botId" class="w-full p-2 border rounded" required>
+</div>
+<div class="mb-4">
+<label for="ownerId" class="block mb-2">Owner ID:</label>
+<input type="text" id="ownerId" name="ownerId" class="w-full p-2 border rounded" readonly>
+</div>
+<div class="mb-4">
+<label for="ownerName" class="block mb-2">Owner Name:</label>
+<input type="text" id="ownerName" name="ownerName" class="w-full p-2 border rounded" readonly>
+</div>
+<div class="mb-4">
+<label for="botName" class="block mb-2">Bot Name:</label>
+<input type="text" id="botName" name="botName" class="w-full p-2 border rounded" required>
+</div>
+<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
 </form>
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 fetch('/api/auth/userinfo')
@@ -90,3 +73,4 @@ console.error('Error submitting bot:', error);
 </script>
 </body>
 </html>
+ 
