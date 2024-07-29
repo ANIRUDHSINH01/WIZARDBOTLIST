@@ -12,7 +12,9 @@ app.use('/api/submit', require('./api/submit'));
 app.use('/api/approve', authMiddleware, require('./api/approve'));
 app.use('/api/reject', authMiddleware, require('./api/reject'));
 app.use('/api/admin', require('./api/admin'));
+app.use('/api/userinfo', require('./api/userinfo'));
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+console.log(`Server running on port ${port}`);
 });
+ 
