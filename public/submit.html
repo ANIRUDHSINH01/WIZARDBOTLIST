@@ -3,74 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Submit Your Bot</title>
+<title>Submit Bot Information</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-4">
-<div class="max-w-lg mx-auto bg-white p-6 rounded shadow-md">
-<h1 class="text-2xl mb-4">Submit Your Bot</h1>
-<div class="profile-menu mb-4">
-  <img id="profile-photo" src="" alt="Profile Photo" class="w-12 h-12 rounded-full">
-<span id="username" class="ml-2"></span>
-<div class="profile-menu-content hidden absolute bg-white shadow-md rounded mt-2">
-<a href="/api/auth/logout" class="block px-4 py-2 text-black hover:bg-gray-200">Logout</a>
-</div>
-</div>
-<form id="submitForm">
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+<div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+<h1 class="text-2xl mb-4 text-center">Submit Your Bot Information</h1>
+<form id="submitForm" action="/api/submit" method="POST">
 <div class="mb-4">
-<label for="botId" class="block mb-2">Bot ID:</label>
-<input type="text" id="botId" name="botId" class="w-full p-2 border rounded" required>
+<label for="botId" class="block text-sm font-medium text-gray-700">Bot ID</label>
+<input type="text" id="botId" name="botId" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 </div>
 <div class="mb-4">
-<label for="ownerId" class="block mb-2">Owner ID:</label>
-<input type="text" id="ownerId" name="ownerId" class="w-full p-2 border rounded" readonly>
+<label for="prefix" class="block text-sm font-medium text-gray-700">Prefix</label>
+<input type="text" id="prefix" name="prefix" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
 </div>
-<div class="mb-4">
-<label for="ownerName" class="block mb-2">Owner Name:</label>
-<input type="text" id="ownerName" name="ownerName" class="w-full p-2 border rounded" readonly>
-</div>
-<div class="mb-4">
-<label for="botName" class="block mb-2">Bot Name:</label>
-<input type="text" id="botName" name="botName" class="w-full p-2 border rounded" required>
-</div>
+<div class="text-center">
 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
+</div>
 </form>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-fetch('/api/auth/userinfo')
-.then(response => response.json())
-.then(data => {
-document.getElementById('profile-photo').src = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`;
-document.getElementById('username').textContent = data.username;
-document.getElementById('ownerId').value = data.id;
-document.getElementById('ownerName').value = data.username;
-})
-.catch(error => console.error('Error fetching user info:', error));
-});
-
-document.getElementById('submitForm').addEventListener('submit', async (event) => {
-event.preventDefault();
-const botId = document.getElementById('botId').value;
-const ownerId = document.getElementById('ownerId').value;
-const ownerName = document.getElementById('ownerName').value;
-const botName = document.getElementById('botName').value;
-
-try {
-const response = await fetch('/api/submit', {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json'
-},
-body: JSON.stringify({ botId, ownerId, ownerName, botName })
-});
-const result = await response.text();
-alert(result);
-} catch (error) {
-console.error('Error submitting bot:', error);
-}
-});
-</script>
 </body>
 </html>
- 
