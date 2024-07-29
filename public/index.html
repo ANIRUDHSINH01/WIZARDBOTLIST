@@ -4,71 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Submit Your Bot</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-<div class="container mx-auto p-4">
-<h1 class="text-3xl font-bold mb-4">Submit Your Bot</h1>
-<div id="authSection">
-<button id="authButton" class="bg-blue-500 text-white p-2 rounded">Authenticate with Discord</button>
-</div>
-<form id="botForm" class="bg-white p-6 rounded shadow-md hidden">
-<div class="mb-4">
-<label for="botID" class="block text-sm font-medium text-gray-700">Bot ID:</label>
-<input type="text" id="botID" name="botID" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
-</div>
-<div class="mb-4">
-<label for="botPrefix" class="block text-sm font-medium text-gray-700">Bot Prefix:</label>
-<input type="text" id="botPrefix" name="botPrefix" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
-</div>
-<div class="mb-4">
-<label for="ownerID" class="block text-sm font-medium text-gray-700">Owner ID:</label>
-<input type="text" id="ownerID" name="ownerID" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" readonly>
-</div>
-<div class="mb-4">
-<label for="ownerName" class="block text-sm font-medium text-gray-700">Owner Name:</label>
-<input type="text" id="ownerName" name="ownerName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" readonly>
-</div>
-<button type="submit" class="bg-blue-500 text-white p-2 rounded">Submit</button>
+<body>
+<h1>Submit Your Bot</h1>
+<form id="submitForm">
+<label for="botId">Bot ID:</label>
+<input type="text" id="botId" name="botId" required>
+<br>
+<label for="ownerId">Owner ID:</label>
+<input type="text" id="ownerId" name="ownerId" required>
+<br>
+<label for="botName">Bot Name:</label>
+<input type="text" id="botName" name="botName" required>
+<br>
+<button type="submit">Submit</button>
 </form>
-<div id="message" class="mt-4"></div>
-</div>
-
 <script>
-const clientId = '1012735980337381396';
-const redirectUri = 'https://wizardbotlist.vercel.app/';
-
-document.getElementById('authButton').addEventListener('click', () => {
-const authUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
-window.location.href = authUrl;
-});
-
-window.onload = async () => {
-const urlParams = new URLSearchParams(window.location.search);
-const code = urlParams.get('code');
-
-if (code) {
-document.getElementById('authSection').classList.add('hidden');
-document.getElementById('botForm').classList.remove('hidden');
-
-try {
-const response = await fetch(`/api/userinfo?code=${code}`);
-const userInfo = await response.json();
-document.getElementById('ownerID').value = userInfo.id;
-document.getElementById('ownerName').value = userInfo.username;
-} catch (error) {
-console.error('Error fetching user info:', error);
-}
-}
-};
-
-document.getElementById('botForm').addEventListener('submit', async function(e) {
-e.preventDefault();
-
-const botID = document.getElementById('botID').value;
-const botPrefix = document.getElementById('botPrefix').value;
-const ownerID = document.getElementById('ownerID').value;
-const ownerName = document.getElementById('ownerName').value;
+document.getElementById('submitForm').addEventListener('submit', async (event) => {
+event.preventDefault();
+const botId = document.getElementById('botId').value;
+const ownerId = document.getElementById('ownerId').value;
+const botName = document.getElementById('botName').value;
 
 try {
 const response = await fetch('/api/submit', {
@@ -76,16 +32,12 @@ method: 'POST',
 headers: {
 'Content-Type': 'application/json'
 },
-body: JSON.stringify({ botID, botPrefix, ownerID, ownerName })
+body: JSON.stringify({ botId, ownerId, botName })
 });
-
-const message = await response.text();
-document.getElementById('message').innerText = message;
-document.getElementById('message').classList.add(response.ok ? 'text-green-500' : 'text-red-500');
+const result = await response.text();
+alert(result);
 } catch (error) {
-console.error('Error:', error);
-document.getElementById('message').innerText = 'Failed to submit bot.';
-document.getElementById('message').classList.add('text-red-500');
+console.error('Error submitting bot:', error);
 }
 });
 </script>
