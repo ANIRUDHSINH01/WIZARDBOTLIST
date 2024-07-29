@@ -1,4 +1,3 @@
-
 const axios = require('axios');
 
 const discordClientId = process.env.DISCORD_CLIENT_ID;
@@ -64,7 +63,7 @@ module.exports = async (req, res) => {
     const ownerName = userInfo.username;
     const inviteLink = `https://discord.com/oauth2/authorize?client_id=${botID}&scope=bot&permissions=0`;
 
-const embed = {
+    const embed = {
         title: "New Bot Submission",
         color: 3447003,
         fields: [
@@ -96,7 +95,7 @@ const embed = {
         });
         res.status(200).send('Bot submitted successfully!');
     } catch (error) {
-        console.error('Error sending webhook:', error);
+        console.error('Error sending webhook:', error.message);
         res.status(500).send('Failed to submit bot.');
     }
 };
