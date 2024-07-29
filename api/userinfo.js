@@ -1,63 +1,57 @@
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const router = express.Router();
 
-const axios = require('axios');
+const USERS_FILE = path.join(__dirname, '../data/users.json');
 
-const discordClientId = process.env.DISCORD_CLIENT_ID;
-const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;
-const discordRedirectUri = process.env.DISCORD_REDIRECT_URI;
+// Middleware to check if user is authenticated
+function isAuthenticated(req, res, next) {
+const userId = req.query.userId; // Assuming userId is passed as a query parameter
+if (!userId) {
+return res.status(400).send('Missing userId');
+}
 
-const getAccessToken = async (code) => {
-try {
-const response = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
-client_id: discordClientId,
-client_secret: discordClientSecret,
-grant_type: 'authorization_code',
-code: code,
-redirect_uri: discordRedirectUri
-}), {
-headers: {
-'Content-Type': 'application/x-www-form-urlencoded'
+let users = [];
+if (fs.existsSync(USERS_FILE)) {
+users = JSON.parse(fs.readFileSync(USERS_FILE));
+}
+
+const user = users.find(user => user.id === userId);
+if (user) {
+req.user = user;
+next();
+} else {
+res.status(404).send('User not found');
+}
+}
+
+// Get user information
+router.get('/', isAuthenticated, (req, res) => {
+res.json(req.user);
+});
+
+// Update user information
+router.post('/', isAuthenticated, (req, res) => {
+const { username, discriminator, avatar } = req.body;
+
+if (!username || !discriminator) {
+return res.status(400).send('Missing username or discriminator');
+}
+
+let users = JSON.parse(fs.readFileSync(USERS_FILE));
+const userIndex = users.findIndex(user => user.id === req.user.id);
+
+if (userIndex !== -1) {
+users[userIndex].username = username;
+users[userIndex].discriminator = discriminator;
+users[userIndex].avatar = avatar || users[userIndex].avatar;
+
+fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+res.send('User information updated successfully');
+} else {
+res.status(404).send('User not found');
 }
 });
-return response.data.access_token;
-} catch (error) {
-console.error('Error fetching access token:', error.response ? error.response.data : error.message);
-return null;
-}
-};
 
-const getUserInfo = async (token) => {
-try {
-const response = await axios.get('https://discord.com/api/v10/users/@me', {
-headers: {
-'Authorization': `Bearer ${token}`
-}
-});
-return response.data;
-} catch (error) {
-console.error('Error fetching user info:', error.response ? error.response.data : error.message);
-return null;
-}
-};
-
-module.exports = async (req, res) => {
-if (req.method !== 'GET') {
-res.status(405).send('Method Not Allowed');
-return;
-}
-
-const { code } = req.query;
-
-const accessToken = await getAccessToken(code);
-if (!accessToken) {
-res.status(400).send('Failed to fetch access token.');
-return;
-}
-
-const userInfo = await getUserInfo(accessToken);
-if (!userInfo) {
-res.status(400).send('Failed to fetch user info.');
-return;
-}
-
-res.status(200).json(userInfo);
-};
+module.exports = router;
