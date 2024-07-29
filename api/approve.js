@@ -27,7 +27,7 @@ res.status(405).send('Method Not Allowed');
     }
 
     const { botID, userID } = req.body;
-    const adminIDs = ['admin1_id', 'admin2_id']; // Replace with actual admin IDs
+    const adminIDs = ['863112842390929448', 'admin2_id']; // Replace with actual admin IDs
 
     if (!adminIDs.includes(userID)) {
         res.status(403).send('Forbidden');
