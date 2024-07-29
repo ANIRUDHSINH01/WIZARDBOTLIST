@@ -36,7 +36,7 @@ headers: {
 });
 
 const userResponse = await axios.get('https://discord.com/api/users/@me', {
-headers: {
+  headers: {
 authorization: `${tokenResponse.data.token_type} ${tokenResponse.data.access_token}`,
 },
 });
@@ -61,11 +61,27 @@ users.push(userData); // Add new user
 // Save users to file
 fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 
+// Set user session
+req.session.user = userData;
+
 // Redirect to submit page
-res.redirect('/');
+res.redirect('/submit.html');
 } catch (error) {
 console.error(error);
 res.status(500).send('Error during the authentication process');
+}
+});
+
+router.get('/logout', (req, res) => {
+req.session.destroy();
+res.redirect('/login.html');
+});
+
+router.get('/userinfo', (req, res) => {
+if (req.session.user) {
+res.json(req.session.user);
+} else {
+res.status(401).send('Not authenticated');
 }
 });
 
