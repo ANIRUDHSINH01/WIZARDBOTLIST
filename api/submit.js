@@ -7,17 +7,25 @@ const webhookUrl = process.env.WEBHOOK_URL;
 
 const getAccessToken = async (code) => {
   try {
-    const response = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
+    console.log("Client ID:", discordClientId);
+    console.log("Client Secret:", discordClientSecret);
+    console.log("Redirect URI:", discordRedirectUri);
+    console.log("Code:", code);
+
+    const params = new URLSearchParams({
       client_id: discordClientId,
       client_secret: discordClientSecret,
       grant_type: 'authorization_code',
       code: code,
       redirect_uri: discordRedirectUri
-    }).toString(), {  // Ensure URLSearchParams is converted to string
+    });
+
+    const response = await axios.post('https://discord.com/api/oauth2/token', params.toString(), {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
+    console.log("Access token response:", response.data);
     return response.data.access_token;
   } catch (error) {
     console.error('Error fetching access token:', error.response?.data || error.message);
