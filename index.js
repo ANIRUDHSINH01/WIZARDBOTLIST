@@ -3,7 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
-require('dotenv').config();
+
 
 app.use(express.json());
 app.use(express.static('public'));
