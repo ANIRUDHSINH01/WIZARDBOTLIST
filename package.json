@@ -1,18 +1,20 @@
 {
-  "name": "wizardbotlist",
-  "version": "1.0.0",
-  "description": "Dashboard for bot submissions and approvals",
-  "scripts": {
-    "dev": "vercel dev"
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "@vercel/node": "^1.11.1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+"name": "wizardbotlist",
+"version": "1.0.0",
+"description": "A Discord bot listing site with authentication and submission features.",
+"main": "index.js",
+"scripts": {
+"start": "node index.js",
+"dev": "vercel dev"
+},
+"dependencies": {
+"axios": "^0.21.1",
+"express": "^4.17.1",
+"express-session": "^1.17.1"
+},
+"engines": {
+"node": ">=14.0.0"
+},
+"author": "ANIRUDHSINH01",
+"license": "MIT"
 }
