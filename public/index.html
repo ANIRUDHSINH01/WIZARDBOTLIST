@@ -40,53 +40,53 @@ const clientId = '1012735980337381396';
 const redirectUri = 'https://wizardbotlist.vercel.app/';  // Update this with your actual redirect URI
 
 document.getElementById('authButton').addEventListener('click', () => {
-const authUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
-window.location.href = authUrl; });
+  const authUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=identify`;
+  window.location.href = authUrl;
+});
+  window.onload = async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get('code');
 
-window.onload = async () => {
-const urlParams = new URLSearchParams(window.location.search);
-const code = urlParams.get('code');
+  if (code) {
+    document.getElementById('authSection').classList.add('hidden');
+    document.getElementById('botForm').classList.remove('hidden');
+    document.getElementById('authCode').value = code;
 
-if (code) {
-document.getElementById('authSection').classList.add('hidden');
-document.getElementById('botForm').classList.remove('hidden');
-document.getElementById('authCode').value = code;
-
-try {
-const response = await fetch(`/api/userinfo?code=${code}`);
-const userInfo = await response.json();
-document.getElementById('ownerID').value = userInfo.id;
-document.getElementById('ownerName').value = userInfo.username;
-} catch (error) {
-console.error('Error fetching user info:', error);
-}
-}
+    try {
+      const response = await fetch(`/api/userinfo?code=${code}`);
+      const userInfo = await response.json();
+      document.getElementById('ownerID').value = userInfo.id;
+      document.getElementById('ownerName').value = userInfo.username;
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  }
 };
 
 document.getElementById('botForm').addEventListener('submit', async function(e) {
-e.preventDefault();
+  e.preventDefault();
 
-const botID = document.getElementById('botID').value;
-const botPrefix = document.getElementById('botPrefix').value;
-const authCode = document.getElementById('authCode').value;
+  const botID = document.getElementById('botID').value;
+  const botPrefix = document.getElementById('botPrefix').value;
+  const authCode = document.getElementById('authCode').value;
 
-try {
-const response = await fetch('/api/submit', {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json'
-},
-body: JSON.stringify({ code: authCode, botID, botPrefix })
-});
+  try {
+    const response = await fetch('/api/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ code: authCode, botID, botPrefix })
+    });
 
-const message = await response.text();
-document.getElementById('message').innerText = message;
-document.getElementById('message').classList.add(response.ok ? 'text-green-500' : 'text-red-500');
-} catch (error) {
-console.error('Error:', error);
-document.getElementById('message').innerText = 'Failed to submit bot.';
-document.getElementById('message').classList.add('text-red-500');
-}
+    const message = await response.text();
+    document.getElementById('message').innerText = message;
+    document.getElementById('message').classList.add(response.ok ? 'text-green-500' : 'text-red-500');
+  } catch (error) {
+    console.error('Error:', error);
+    document.getElementById('message').innerText = 'Failed to submit bot.';
+    document.getElementById('message').classList.add('text-red-500');
+  }
 });
 </script>
 </body>
