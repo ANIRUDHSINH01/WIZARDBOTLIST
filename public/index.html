@@ -5,14 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome to Wizard Bot List</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+<script>
+// Check if user is logged in and show submit bot link accordingly
+function checkLogin() {
+fetch('/api/auth/userinfo')
+.then(response => {
+if (!response.ok) {
+throw new Error('Not logged in');
+}
+return response.json();
+})
+.then(data => {
+document.getElementById('submit-bot-link').style.display = 'inline';
+document.getElementById('login-link').style.display = 'none';
+})
+.catch(error => {
+console.log('User is not logged in:', error);
+document.getElementById('submit-bot-link').style.display = 'none';
+});
+}
+</script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100" onload="checkLogin()">
 <header class="bg-gray-800 text-white p-4 text-center">
 <h1 class="text-2xl">Welcome to Wizard Bot List</h1>
 </header>
 <nav class="bg-gray-700 text-white p-4 text-center">
-<a href="/login.html" class="mx-2 hover:underline">Login</a> |
+<a href="/login.html" id="login-link" class="mx-2 hover:underline">Login</a> |
+<span id="submit-bot-link" style="display: none;">
 <a href="/submit.html" class="mx-2 hover:underline">Submit Your Bot</a> |
+</span>
 <a href="/admin.html" class="mx-2 hover:underline">Admin Panel</a>
 </nav>
 <main class="p-4">
