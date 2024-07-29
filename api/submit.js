@@ -1,38 +1,27 @@
-const axios = require('axios');
+const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const router = express.Router();
 
-const webhookUrl = process.env.WEBHOOK_URL;
-const submissionsFile = path.join(__dirname, 'submissions.json');
+const BOTS_FILE = path.join(__dirname, '../data/bots.json');
 
-// Load submissions from file
-const loadSubmissions = () => {
-    try {
-        const data = fs.readFileSync(submissionsFile, 'utf8');
-        return JSON.parse(data);
-    } catch (error) {
-        return [];
+router.post('/', (req, res) => {
+    const { botId, ownerId, botName } = req.body;
+
+    if (!botId || !ownerId || !botName) {
+        return res.status(400).send('Missing botId, ownerId, or botName');
     }
-};
 
-// Save submissions to file
-const saveSubmissions = (submissions) => {
-    fs.writeFileSync(submissionsFile, JSON.stringify(submissions, null, 2));
-};
-
-module.exports = async (req, res) => {
-    if (req.method === 'POST') {
-        const { botID, botPrefix, ownerID, ownerName } = req.body;
-        const submissions = loadSubmissions();
-
-        submissions.push({ botID, botPrefix, ownerID, ownerName, status: 'pending' });
-        saveSubmissions(submissions);
-
-        res.status(200).send('Bot submitted successfully!');
-    } else if (req.method === 'GET') {
-        const submissions = loadSubmissions();
-        res.status(200).json(submissions);
-    } else {
-        res.status(405).send('Method Not Allowed');
+    let bots = [];
+    if (fs.existsSync(BOTS_FILE)) {
+        bots = JSON.parse(fs.readFileSync(BOTS_FILE));
     }
-};
+
+    bots.push({ botId, ownerId, botName, status: 'pending' });
+
+    fs.writeFileSync(BOTS_FILE, JSON.stringify(bots, null, 2));
+
+    res.send('Bot submitted successfully');
+});
+
+module.exports = router;
