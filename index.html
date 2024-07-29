@@ -61,6 +61,12 @@ background-color: #218838;
 <div class="container">
 <h1>Submit Your Bot</h1>
 <form id="botForm">
+<label for="botName">Bot Name:</label>
+<input type="text" id="botName" name="botName" required>
+
+<label for="botLink">Bot Link:</label>
+<input type="text" id="botLink" name="botLink" required>
+
 <label for="botID">Bot ID:</label>
 <input type="text" id="botID" name="botID" required>
 
@@ -74,7 +80,8 @@ background-color: #218838;
 <script>
 document.getElementById('botForm').addEventListener('submit', async (event) => {
 event.preventDefault();
-
+const botName = document.getElementById('botName').value;
+const botLink = document.getElementById('botLink').value;
 const botID = document.getElementById('botID').value;
 const botPrefix = document.getElementById('botPrefix').value;
 
@@ -99,9 +106,23 @@ const embed = {
 "title": "New Bot Submission",
 "color": 3447003,
 "fields": [
+{ "name": "Bot Name", "value": botName, "inline": false },
+{ "name": "Bot Link", "value": botLink, "inline": false },
 { "name": "Bot ID", "value": botID, "inline": false },
-{ "name": "Bot Prefix", "value": botPrefix, "inline": false },
-{ "name": "Invite Link", "value": `[Invite Link](${inviteLink})`, "inline": false }
+{ "name": "Bot Prefix", "value": botPrefix, "inline": false }
+],
+"components": [
+{
+"type": 1,
+"components": [
+{
+"type": 2,
+"label": "Invite Link",
+"style": 5,
+"url": inviteLink
+}
+]
+}
 ]
 };
 
