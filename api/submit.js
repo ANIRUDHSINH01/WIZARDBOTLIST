@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-const webhookUrl = 'https://discord.com/api/webhooks/{webhook_id}/{webhook_token}';
+const webhookUrl = 'https://discord.com/api/webhooks/1267355436370366497/y0BcK23tR8NvPKvbTRVp5kA4LquoDhoiBoDfmZuPZkuV1_hH_Hxj8szNFEDxNwicyqE5';
 
 router.post('/', async (req, res) => {
 const { botId, prefix } = req.body;
