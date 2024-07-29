@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static('public'));
 app.use(session({
-secret: 'your_secret_key',
+secret: 'e5f6d7c8b9a0d1e2f3g4h5i6j7k8l9m0n1o2p3q4r5s6t7u8v9w0x1y2z3a4b5c6',
 resave: false,
 saveUninitialized: true,
 cookie: { secure: false } // Use secure: true in production with HTTPS
