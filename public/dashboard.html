@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Submissions Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Bot Submissions Dashboard</h1>
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr>
+                    <th class="py-2">Bot ID</th>
+                    <th class="py-2">Bot Prefix</th>
+                    <th class="py-2">Owner ID</th>
+                    <th class="py-2">Owner Name</th>
+                    <th class="py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="submissionsTable">
+                <!-- Submissions will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const userID = 'current_user_id'; // Replace with actual user ID
+
+        const loadSubmissions = async () => {
+            try {
+                const response = await fetch('/api/submit');
+                const submissions = await response.json();
+                const tableBody = document.getElementById('submissionsTable');
+
+                submissions.forEach(submission => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="py-2">${submission.botID}</td>
+                        <td class="py-2">${submission.botPrefix}</td>
+                        <td class="py-2">${submission.ownerID}</td>
+                        <td class="py-2">${submission.ownerName}</td>
+                        <td class="py-2">${['admin1_id', 'admin2_id'].includes(userID) ? `
+                            <button class="bg-green-500 text-white p-2 rounded" onclick="approveBot('${submission.botID}')">Approve</button>
+                            <button class="bg-red-500 text-white p-2 rounded" onclick="rejectBot('${submission.botID}')">Reject</button>
+                            ` : ''}
+                            <a href="https://discord.com/oauth2/authorize?client_id=${submission.botID}&scope=bot&permissions=0" class="bg-blue-500 text-white p-2 rounded" target="_blank">Invite Bot</a>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+            }
+        };
+
+        const approveBot = async (botID) => {
+            try {
+                await fetch('/api/approve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ botID, userID })
+                });
+                alert('Bot approved successfully!');
+                location.reload();
+            } catch (error) {
+                console.error('Error approving bot:', error);
+                alert('Failed to approve bot.');
+            }
+        };
+
+        const rejectBot = async (botID) => {
+            try {
+                await fetch('/api/reject', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ botID, userID })
+                });
+                alert('Bot rejected successfully!');
+                location.reload();
+            } catch (error) {
+                console.error('Error rejecting bot:', error);
+                alert('Failed to reject bot.');
+              
+            }
+        };
+
+        window.onload = loadSubmissions;
+    </script>
+</body>
+</html>
