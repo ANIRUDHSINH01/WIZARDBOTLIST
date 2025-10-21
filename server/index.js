@@ -1,9 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const passport = require('passport');
+const connectDB = require('./db');
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Connect to MongoDB
+connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
