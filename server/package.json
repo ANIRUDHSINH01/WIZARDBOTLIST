@@ -1,0 +1,25 @@
+{
+  "name": "wizard-bot-list",
+  "version": "1.0.0",
+  "description": "A Discord bot list with authentication and submission features",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "passport": "^0.4.1",
+    "passport-discord": "^0.1.4",
+    "dotenv": "^8.2.0",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "author": "Guddu",
+  "license": "ISC"
+}
