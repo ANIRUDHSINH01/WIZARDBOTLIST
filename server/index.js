@@ -10,6 +10,18 @@ const port = process.env.PORT || 3001;
 // Connect to MongoDB
 connectDB();
 
+const MongoStore = require('connect-mongo');
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions'
+  }),
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
