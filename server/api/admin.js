@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
-const path = require('path');
+const Bot = require('../models/Bot');
 
-const botsFilePath = path.join(__dirname, '..', 'data', 'bots.json');
 const ADMIN_USER_IDS = (process.env.ADMIN_USER_IDS || '').split(',');
 
 // Middleware to check if user is admin
@@ -15,64 +13,48 @@ function isAdmin(req, res, next) {
 }
 
 // Get all pending bots
-router.get('/pending', isAdmin, (req, res) => {
-  fs.readFile(botsFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading bots.json:', err);
-      return res.status(500).send('Error reading bot data.');
-    }
-    const bots = JSON.parse(data);
-    const pendingBots = Object.values(bots).filter(bot => bot.status === 'pending');
+router.get('/pending', isAdmin, async (req, res) => {
+  try {
+    const pendingBots = await Bot.find({ status: 'pending' });
     res.json(pendingBots);
-  });
+  } catch (err) {
+    console.error('Error fetching pending bots:', err);
+    res.status(500).send('Error fetching pending bots.');
+  }
 });
 
 // Approve a bot
-router.post('/:id/approve', isAdmin, (req, res) => {
-  const botId = req.params.id;
-  fs.readFile(botsFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading bots.json:', err);
-      return res.status(500).send('Error reading bot data.');
-    }
-    const bots = JSON.parse(data);
-    if (bots[botId]) {
-      bots[botId].status = 'approved';
-      fs.writeFile(botsFilePath, JSON.stringify(bots, null, 2), (writeErr) => {
-        if (writeErr) {
-          console.error('Error writing to bots.json:', writeErr);
-          return res.status(500).send('Error updating bot status.');
-        }
-        res.send(`Bot ${botId} has been approved.`);
-      });
+router.post('/:id/approve', isAdmin, async (req, res) => {
+  try {
+    const updatedBot = await Bot.findOneAndUpdate(
+      { id: req.params.id },
+      { status: 'approved' },
+      { new: true }
+    );
+    if (updatedBot) {
+      res.send(`Bot ${req.params.id} has been approved.`);
     } else {
       res.status(404).send('Bot not found.');
     }
-  });
+  } catch (err) {
+    console.error('Error approving bot:', err);
+    res.status(500).send('Error approving bot.');
+  }
 });
 
 // Reject a bot
-router.post('/:id/reject', isAdmin, (req, res) => {
-  const botId = req.params.id;
-  fs.readFile(botsFilePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading bots.json:', err);
-      return res.status(500).send('Error reading bot data.');
-    }
-    const bots = JSON.parse(data);
-    if (bots[botId]) {
-      delete bots[botId]; // Or mark as rejected, for now we delete
-      fs.writeFile(botsFilePath, JSON.stringify(bots, null, 2), (writeErr) => {
-        if (writeErr) {
-          console.error('Error writing to bots.json:', writeErr);
-          return res.status(500).send('Error updating bot status.');
-        }
-        res.send(`Bot ${botId} has been rejected.`);
-      });
+router.post('/:id/reject', isAdmin, async (req, res) => {
+  try {
+    const deletedBot = await Bot.findOneAndDelete({ id: req.params.id });
+    if (deletedBot) {
+      res.send(`Bot ${req.params.id} has been rejected.`);
     } else {
       res.status(404).send('Bot not found.');
     }
-  });
+  } catch (err) {
+    console.error('Error rejecting bot:', err);
+    res.status(500).send('Error rejecting bot.');
+  }
 });
 
 module.exports = router;
