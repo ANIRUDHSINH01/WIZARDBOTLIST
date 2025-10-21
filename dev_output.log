@@ -1,0 +1,18 @@
+
+> wizardbotlist@1.0.0 dev
+> concurrently "npm run server" "npm run client"
+
+[0]
+[0] > wizardbotlist@1.0.0 server
+[0] > nodemon server/index.js
+[0]
+[1]
+[1] > wizardbotlist@1.0.0 client
+[1] > npm start --prefix client
+[1]
+[0] sh: 1: nodemon: not found
+[0] npm run server exited with code 127
+[1]
+[1] > client@0.1.0 start
+[1] > react-scripts start
+[1]
