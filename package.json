@@ -1,16 +1,29 @@
 {
-  "name": "wizardbotlist",
+  "name": "wizard-bot-list",
   "version": "1.0.0",
   "description": "A Discord bot list with authentication and submission features",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "server": "npm run dev --prefix server",
-    "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
-    "concurrently": "^7.0.0"
+    "axios": "^0.21.1",
+    "dotenv": "^8.6.0",
+    "ejs": "^3.1.10",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^8.19.2",
+    "passport": "^0.4.1",
+    "passport-discord": "^0.1.4",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
+    "nodemon": "^2.0.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.15"
   },
   "author": "Guddu",
   "license": "ISC"

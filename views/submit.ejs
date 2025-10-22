@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+<h1 class="text-4xl font-bold mb-4">Submit Bot</h1>
+
+<form action="/api/submit" method="post" class="bg-gray-800 p-4 rounded-lg">
+  <div class="mb-4">
+    <label for="botId" class="block mb-2">Bot ID</label>
+    <input type="text" id="botId" name="botId" class="w-full bg-gray-700 p-2 rounded" required>
+  </div>
+  <div class="mb-4">
+    <label for="prefix" class="block mb-2">Prefix</label>
+    <input type="text" id="prefix" name="prefix" class="w-full bg-gray-700 p-2 rounded" required>
+  </div>
+  <div class="mb-4">
+    <label for="shortDescription" class="block mb-2">Short Description</label>
+    <textarea id="shortDescription" name="shortDescription" class="w-full bg-gray-700 p-2 rounded" required></textarea>
+  </div>
+  <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Submit</button>
+</form>
+
+<%- include('partials/footer') %>
